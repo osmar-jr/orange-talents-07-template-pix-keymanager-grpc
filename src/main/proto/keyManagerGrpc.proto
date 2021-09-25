@@ -12,15 +12,17 @@ service KeyManagerGrpcService {
 }
 
 enum TipoDeChave {
-  CHAVE_ALEATORIA = 0;
+  UNKNOWN_CHAVE = 0;
   CPF = 1;
   EMAIL = 2;
   TELEFONE_CELULAR = 3;
+  CHAVE_ALEATORIA = 4;
 }
 
 enum TipoDeConta {
-  CONTA_CORRENTE = 0;
-  CONTA_POUPANCA = 1;
+  UNKNOWN_CONTA = 0;
+  CONTA_CORRENTE = 1;
+  CONTA_POUPANCA = 2;
 }
 
 message ChavePixRequest {
@@ -31,5 +33,6 @@ message ChavePixRequest {
 }
 
 message ChavePixResponse {
-  int64 pixId = 1;
+  string pixId = 1;
+  string clientId = 2;
 }

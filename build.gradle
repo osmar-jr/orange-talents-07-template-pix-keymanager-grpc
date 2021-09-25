@@ -34,6 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("io.micronaut:micronaut-validation")
+    implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
     implementation("io.micronaut:micronaut-http-client")
     implementation("org.postgresql:postgresql:42.2.23")
 
