@@ -112,6 +112,33 @@ internal class CadastraChavePixEndpointTest(
         }
     }
 
+    @Test
+    fun `nao deve cadastrar chave quando cliente nao encontrado no sistema de contas do banco`(){
+        `when`(erpItauClient.consultaClientePorTipoDeConta(
+            clienteId = CLIENT_ID.toString(),
+            tipo = TipoConta.CONTA_POUPANCA.name
+        )).thenReturn(HttpResponse.notFound())
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.cadastraChavePix(
+                ChavePixRequest.newBuilder()
+                    .setIdentificadorCliente(CLIENT_ID.toString())
+                    .setTipoDeChave(TipoDeChave.CPF)
+                    .setChave("54618975091")
+                    .setTipoDeConta(TipoDeConta.CONTA_POUPANCA)
+                    .build()
+            )
+        }
+
+        with(exception){
+            assertEquals(Status.FAILED_PRECONDITION.code, status.code)
+            assertEquals(
+                "Cliente não encontrado no sistemas de contas do banco.",
+                status.description
+            )
+        }
+    }
+
     private fun chavePix(): ChavePix {
         return ChavePix(
             identificadorCliente = CLIENT_ID,
