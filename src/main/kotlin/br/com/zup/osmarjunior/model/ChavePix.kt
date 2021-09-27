@@ -43,13 +43,18 @@ class ChavePix(
     val conta: ContaAssociada
 ) {
 
-
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
     var id: UUID? = null
 
+    val now = LocalDateTime.now()
+
     @Column(nullable = false, updatable = false)
-    val criadoEm: LocalDateTime = LocalDateTime.now()
+    val criadoEm: LocalDateTime = now
+
+    fun pertenceAoCliente(clienteId: String): Boolean {
+        return this.identificadorCliente.equals(UUID.fromString(clienteId))
+    }
 }
 

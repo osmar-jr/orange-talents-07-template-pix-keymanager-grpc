@@ -11,6 +11,9 @@ service KeyManagerGrpcService {
   rpc cadastraChavePix (ChavePixRequest) returns (ChavePixResponse) {}
 }
 
+service KeyManagerRemoveService {
+  rpc removerChavePix (RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
+}
 enum TipoDeChave {
   UNKNOWN_CHAVE = 0;
   CPF = 1;
@@ -35,4 +38,13 @@ message ChavePixRequest {
 message ChavePixResponse {
   string pixId = 1;
   string clientId = 2;
+}
+
+message RemoveChavePixRequest {
+  string pixId = 1;
+  string clientId = 2;
+}
+
+message RemoveChavePixResponse {
+  string clientId = 1;
 }

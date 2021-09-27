@@ -1,5 +1,6 @@
 package br.com.zup.osmarjunior.shared.handlers
 import br.com.zup.osmarjunior.exceptions.ChavePixExistenteException
+import br.com.zup.osmarjunior.exceptions.ChavePixNaoEncontradaException
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.aop.InterceptorBean
@@ -28,6 +29,9 @@ class ErrorAroundHandlerInterceptor : MethodInterceptor<Any, Any> {
                     .withCause(ex)
                     .withDescription(ex.message)
                 is IllegalStateException -> Status.FAILED_PRECONDITION
+                    .withDescription(ex.message)
+                    .withCause(ex)
+                is ChavePixNaoEncontradaException -> Status.NOT_FOUND
                     .withDescription(ex.message)
                     .withCause(ex)
                 else -> Status.UNKNOWN
