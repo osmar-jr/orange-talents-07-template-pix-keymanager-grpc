@@ -27,6 +27,9 @@ class ErrorAroundHandlerInterceptor : MethodInterceptor<Any, Any> {
                 is ChavePixExistenteException -> Status.ALREADY_EXISTS
                     .withCause(ex)
                     .withDescription(ex.message)
+                is IllegalStateException -> Status.NOT_FOUND
+                    .withDescription(ex.message)
+                    .withCause(ex)
                 else -> Status.UNKNOWN
                     .withCause(ex)
                     .withDescription("Ops, um erro inesperado ocorreu")

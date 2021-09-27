@@ -3,15 +3,12 @@ package br.com.zup.osmarjunior.endpoints
 import br.com.zup.osmarjunior.ChavePixRequest
 import br.com.zup.osmarjunior.ChavePixResponse
 import br.com.zup.osmarjunior.KeyManagerGrpcServiceGrpc
-import br.com.zup.osmarjunior.exceptions.ChavePixExistenteException
 import br.com.zup.osmarjunior.service.NovaChavePixService
 import br.com.zup.osmarjunior.shared.handlers.ErrorAroundHandler
 import br.com.zup.osmarjunior.utils.toModel
-import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import javax.validation.ConstraintViolationException
 
 @ErrorAroundHandler
 @Singleton
