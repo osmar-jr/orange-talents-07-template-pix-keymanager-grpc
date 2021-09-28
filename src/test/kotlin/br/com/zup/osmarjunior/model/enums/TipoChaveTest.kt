@@ -44,18 +44,53 @@ internal class TipoChaveTest{
     }
 
     @Nested
-    inner class TELEFONE_CELULAR {
+    inner class CNPJ {
+
+        @Test
+        fun `deve retornar valido quando informado um numero valido`(){
+            with(TipoChave.CNPJ){
+                assertTrue(valida("03538825000152"))
+            }
+        }
+
+        @Test
+        fun `deve retornar invalido quando cpf nao for informado`(){
+            with(TipoChave.CNPJ){
+                assertFalse(valida(null))
+                assertFalse(valida(""))
+                assertFalse(valida("  "))
+            }
+        }
+
+        @Test
+        fun `deve retornar invalido quando informado um numero invalido ou com pontuacao`(){
+            with(TipoChave.CNPJ){
+                assertFalse(valida("377710060001722"))
+                assertFalse(valida("37.771.006/0001-72"))
+            }
+        }
+
+        @Test
+        fun `deve retornar invalido quando informado um valor com letras`(){
+            with(TipoChave.CNPJ){
+                assertFalse(valida("0353O8250001Q2"))
+            }
+        }
+    }
+
+    @Nested
+    inner class PHONE {
 
         @Test
         fun `deve retornar valido quando informado um numero de telefone correto`(){
-            with(TipoChave.TELEFONE_CELULAR){
+            with(TipoChave.PHONE){
                 assertTrue(valida("+5585988714077"))
             }
         }
 
         @Test
         fun `deve retornar invalido quando numero de telefone nao for informado`(){
-            with(TipoChave.TELEFONE_CELULAR){
+            with(TipoChave.PHONE){
                 assertFalse(valida(null))
                 assertFalse(valida(""))
                 assertFalse(valida("   "))
@@ -64,7 +99,7 @@ internal class TipoChaveTest{
 
         @Test
         fun `deve retornar invalido quando numero de telefone mal formatado`(){
-            with(TipoChave.TELEFONE_CELULAR){
+            with(TipoChave.PHONE){
                 assertFalse(valida("5585988714077"))
                 assertFalse(valida("+55 (85) 9 8871-4077"))
             }
@@ -101,11 +136,11 @@ internal class TipoChaveTest{
     }
 
     @Nested
-    inner class CHAVE_ALEATORIA {
+    inner class RANDOM {
 
         @Test
         fun `deve retornar valido quando chave aleatoria nao informada`(){
-            with(TipoChave.CHAVE_ALEATORIA){
+            with(TipoChave.RANDOM){
                 assertTrue(valida(null))
                 assertTrue(valida(""))
                 assertTrue(valida("   "))
@@ -114,7 +149,7 @@ internal class TipoChaveTest{
 
         @Test
         fun `deve retornar invalido quando chave aleatoria for informada`(){
-            with(TipoChave.CHAVE_ALEATORIA){
+            with(TipoChave.RANDOM){
                 assertFalse(valida("QUALQUER VALOR"))
             }
         }

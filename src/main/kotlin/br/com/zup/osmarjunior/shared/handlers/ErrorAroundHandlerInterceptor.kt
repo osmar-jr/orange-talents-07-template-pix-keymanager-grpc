@@ -1,6 +1,8 @@
 package br.com.zup.osmarjunior.shared.handlers
+
 import br.com.zup.osmarjunior.exceptions.ChavePixExistenteException
 import br.com.zup.osmarjunior.exceptions.ChavePixNaoEncontradaException
+import br.com.zup.osmarjunior.exceptions.OperacaoNaoPermitidaException
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.aop.InterceptorBean
@@ -21,25 +23,21 @@ class ErrorAroundHandlerInterceptor : MethodInterceptor<Any, Any> {
 
             val responseObserver = context.parameterValues[1] as StreamObserver<*>
 
-            val status = when(ex) {
+            val status = when (ex) {
                 is ConstraintViolationException -> Status.INVALID_ARGUMENT
-                    .withCause(ex)
-                    .withDescription(ex.message)
                 is ChavePixExistenteException -> Status.ALREADY_EXISTS
-                    .withCause(ex)
-                    .withDescription(ex.message)
                 is IllegalStateException -> Status.FAILED_PRECONDITION
-                    .withDescription(ex.message)
-                    .withCause(ex)
                 is ChavePixNaoEncontradaException -> Status.NOT_FOUND
-                    .withDescription(ex.message)
-                    .withCause(ex)
+                is OperacaoNaoPermitidaException -> Status.PERMISSION_DENIED
                 else -> Status.UNKNOWN
-                    .withCause(ex)
-                    .withDescription("Ops, um erro inesperado ocorreu")
             }
 
-            responseObserver.onError(status.asRuntimeException())
+            responseObserver.onError(
+                status
+                    .withCause(ex)
+                    .withDescription(ex.message)
+                    .asRuntimeException()
+            )
         }
 
         return null

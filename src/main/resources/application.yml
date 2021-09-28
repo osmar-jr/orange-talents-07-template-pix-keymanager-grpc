@@ -19,6 +19,5 @@ jpa.default.properties.hibernate.hbm2ddl.auto: ${DB_DDL:update}
 
 
 # hosts clients
-kmgrpc:
-  hosts:
-    erp_itau: ${HOST_ERP_ITAU:`http://localhost:9091`}
+erp_itau.host: ${HOST_ERP_ITAU:`http://localhost:9091`}
+bcb.host: ${HOST_BCB:`http://localhost:8082`}

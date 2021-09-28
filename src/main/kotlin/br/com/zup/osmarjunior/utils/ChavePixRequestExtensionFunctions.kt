@@ -11,7 +11,7 @@ fun ChavePixRequest.toModel(): NovaChavePix {
     return NovaChavePix(
         identificadorCliente = identificadorCliente,
         tipoDeChave = when(tipoDeChave){
-            TipoDeChave.UNKNOWN_CHAVE -> TipoChave.CHAVE_ALEATORIA
+            TipoDeChave.UNKNOWN_KEY -> TipoChave.RANDOM
             else -> TipoChave.valueOf(tipoDeChave.name)
         },
         chave = chave,

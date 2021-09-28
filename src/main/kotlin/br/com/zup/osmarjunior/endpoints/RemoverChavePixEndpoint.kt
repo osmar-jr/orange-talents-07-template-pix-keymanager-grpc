@@ -3,7 +3,7 @@ package br.com.zup.osmarjunior.endpoints
 import br.com.zup.osmarjunior.KeyManagerRemoveServiceGrpc
 import br.com.zup.osmarjunior.RemoveChavePixRequest
 import br.com.zup.osmarjunior.RemoveChavePixResponse
-import br.com.zup.osmarjunior.service.ChavePixService
+import br.com.zup.osmarjunior.service.RemoveChavePixService
 import br.com.zup.osmarjunior.shared.handlers.ErrorAroundHandler
 import br.com.zup.osmarjunior.utils.toModel
 import io.grpc.stub.StreamObserver
@@ -13,7 +13,7 @@ import jakarta.inject.Singleton
 @ErrorAroundHandler
 @Singleton
 class RemoverChavePixEndpoint(
-    @Inject val chavePixService: ChavePixService
+    @Inject val removeChavePixService: RemoveChavePixService
 ) : KeyManagerRemoveServiceGrpc.KeyManagerRemoveServiceImplBase() {
 
     override fun removerChavePix(
@@ -21,7 +21,7 @@ class RemoverChavePixEndpoint(
         responseObserver: StreamObserver<RemoveChavePixResponse>?
     ) {
         val clienteChave = request?.toModel()
-        chavePixService.remover(clienteChave!!)
+        removeChavePixService.remover(clienteChave!!)
 
         responseObserver?.onNext(
             RemoveChavePixResponse

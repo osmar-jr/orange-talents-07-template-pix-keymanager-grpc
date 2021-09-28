@@ -2,6 +2,7 @@ package br.com.zup.osmarjunior.endpoints.dtos
 
 import br.com.zup.osmarjunior.annotations.ValidPixKey
 import br.com.zup.osmarjunior.annotations.ValidUUID
+import br.com.zup.osmarjunior.clients.response.CreatePixKeyResponse
 import br.com.zup.osmarjunior.model.ChavePix
 import br.com.zup.osmarjunior.model.ContaAssociada
 import br.com.zup.osmarjunior.model.enums.TipoChave
@@ -28,14 +29,18 @@ data class NovaChavePix(
     @field:NotNull
     val tipoDeConta: TipoConta?
 ) {
-    fun toModel(conta: ContaAssociada): ChavePix {
+    fun toModel(conta: ContaAssociada, bcbKey: CreatePixKeyResponse): ChavePix {
         return ChavePix(
             identificadorCliente = UUID.fromString(this.identificadorCliente),
             tipoChave = TipoChave.valueOf(this.tipoDeChave!!.name),
-            chave = if (this.tipoDeChave == TipoChave.CHAVE_ALEATORIA) UUID.randomUUID().toString() else this.chave!!,
+            chave = if (this.tipoDeChave == TipoChave.RANDOM) bcbKey.key else this.chave!!,
             tipoConta = TipoConta.valueOf(this.tipoDeConta!!.name),
             conta = conta
         )
+    }
+
+    fun isRandom(): Boolean {
+        return this.tipoDeChave!! == TipoChave.RANDOM
     }
 
 }

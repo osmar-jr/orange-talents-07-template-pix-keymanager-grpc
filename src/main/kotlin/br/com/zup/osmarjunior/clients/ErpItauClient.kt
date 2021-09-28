@@ -9,7 +9,7 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
 
-@Client(value = "\${kmgrpc.hosts.erp_itau}")
+@Client(value = "\${erp_itau.host}")
 interface ErpItauClient {
 
     @Get(value = "/api/v1/clientes/{clienteId}/contas{?tipo}")
