@@ -1,6 +1,12 @@
 package br.com.zup.osmarjunior.model
 
+import br.com.zup.osmarjunior.clients.request.BankAccountRequest
+import br.com.zup.osmarjunior.clients.request.CreatePixKeyRequest
+import br.com.zup.osmarjunior.clients.request.OwnerRequest
+import br.com.zup.osmarjunior.endpoints.dtos.NovaChavePix
+import br.com.zup.osmarjunior.model.enums.OwnerType
 import io.micronaut.core.annotation.Introspected
+import java.util.*
 import javax.persistence.Embeddable
 import javax.validation.constraints.NotBlank
 
@@ -22,4 +28,30 @@ class ContaAssociada(
 
     @field:NotBlank
     val numeroDaConta: String
-)
+){
+    companion object{
+        val ITAU_UNIBANCO_ISPB: String = "60701190"
+    }
+
+    fun toCreateChavePixRequest(novaChavePix: NovaChavePix): CreatePixKeyRequest {
+        val bankAccount = BankAccountRequest(
+            participant = ITAU_UNIBANCO_ISPB,
+            branch = this.agencia,
+            accountNumber = this.numeroDaConta,
+            accountType = novaChavePix.tipoDeConta!!.toAccountType()
+        )
+
+        val owner = OwnerRequest(
+            type = OwnerType.getInstance(this.cpfDoTitular),
+            name = this.instituicao,
+            taxIdNumber = this.cpfDoTitular
+        )
+
+        return CreatePixKeyRequest(
+            keyType = novaChavePix.tipoDeChave!!.toKeyType(),
+            key = if(novaChavePix.isRandom()) UUID.randomUUID().toString() else novaChavePix.chave!!,
+            bankAccount = bankAccount,
+            owner = owner
+        )
+    }
+}

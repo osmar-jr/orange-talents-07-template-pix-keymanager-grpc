@@ -41,13 +41,12 @@ class NovaChavePixService(
             ?: throw IllegalStateException("Cliente não encontrado no sistemas de contas do banco.")
 
         val conta = dadosDaContaResponse.toModel()
+        val createChavePixRequest = conta.toCreateChavePixRequest(novaChavePix)
 
-        val createChavePixRequest = dadosDaContaResponse.toCreateChavePixRequest(novaChavePix)
         val bcbResponse = bcbClient.registra(createChavePixRequest)
-
         val createPixKeyResponse = when (bcbResponse.status) {
             HttpStatus.CREATED -> bcbResponse.body()
-            HttpStatus.UNPROCESSABLE_ENTITY -> throw ChavePixExistenteException("A chave ${novaChavePix.chave} já está cadastrada.")
+            HttpStatus.UNPROCESSABLE_ENTITY -> throw ChavePixExistenteException("A chave ${novaChavePix.chave} já está cadastrada no sistema do BCB.")
             else -> throw Exception("Erro inesperado ao tentar registrar a chave no Banco Central.")
         }
 

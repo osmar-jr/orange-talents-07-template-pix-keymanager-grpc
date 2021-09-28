@@ -50,6 +50,7 @@ class RemoveChavePixService(
             ?: throw IllegalStateException("Cliente não encontrado no sistema de contas do banco.")
 
         val deletePixKeyRequest = dadosDoTitularResponse.toDeletePixKeyRequest(chavePix)
+        logger.info("$deletePixKeyRequest")
 
         val bcbResponse = bcbClient.remove(chavePix.chave, deletePixKeyRequest)
         when(bcbResponse.status){
