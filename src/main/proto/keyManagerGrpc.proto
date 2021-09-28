@@ -41,10 +41,11 @@ message ChavePixResponse {
 }
 
 message RemoveChavePixRequest {
-  string pixId = 1;
-  string clientId = 2;
+  string clientId = 1;
+  string pixId = 2;
 }
 
 message RemoveChavePixResponse {
   string clientId = 1;
+  string pixId = 2;
 }

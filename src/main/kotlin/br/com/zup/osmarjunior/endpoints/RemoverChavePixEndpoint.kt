@@ -28,6 +28,7 @@ class RemoverChavePixEndpoint(
             RemoveChavePixResponse
                 .newBuilder()
                 .setClientId(clienteChave.identificadorCliente)
+                .setPixId(clienteChave.chavePixId)
                 .build()
         )
         responseObserver?.onCompleted()
