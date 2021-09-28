@@ -1,6 +1,5 @@
 package br.com.zup.osmarjunior.endpoints
 
-import br.com.zup.osmarjunior.KeyManagerGrpcServiceGrpc
 import br.com.zup.osmarjunior.KeyManagerRemoveServiceGrpc
 import br.com.zup.osmarjunior.RemoveChavePixRequest
 import br.com.zup.osmarjunior.RemoveChavePixResponse

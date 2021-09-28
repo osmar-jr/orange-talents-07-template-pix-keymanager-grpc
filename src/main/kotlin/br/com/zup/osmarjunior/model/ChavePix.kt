@@ -1,7 +1,5 @@
 package br.com.zup.osmarjunior.model
 
-import br.com.zup.osmarjunior.TipoDeChave
-import br.com.zup.osmarjunior.TipoDeConta
 import br.com.zup.osmarjunior.model.enums.TipoChave
 import br.com.zup.osmarjunior.model.enums.TipoConta
 import java.time.LocalDateTime
@@ -48,10 +46,8 @@ class ChavePix(
     @Column(name = "id", nullable = false)
     var id: UUID? = null
 
-    val now = LocalDateTime.now()
-
     @Column(nullable = false, updatable = false)
-    val criadoEm: LocalDateTime = now
+    val criadoEm: LocalDateTime = LocalDateTime.now()
 
     fun pertenceAoCliente(clienteId: String): Boolean {
         return this.identificadorCliente.equals(UUID.fromString(clienteId))

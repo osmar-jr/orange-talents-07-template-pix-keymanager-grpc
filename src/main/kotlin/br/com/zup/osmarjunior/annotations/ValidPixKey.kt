@@ -1,8 +1,6 @@
 package br.com.zup.osmarjunior.annotations
 
-import br.com.zup.osmarjunior.TipoDeChave
 import br.com.zup.osmarjunior.endpoints.dtos.NovaChavePix
-import br.com.zup.osmarjunior.model.enums.TipoChave
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
