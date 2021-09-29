@@ -43,7 +43,7 @@ class ContaAssociada(
 
         val owner = OwnerRequest(
             type = OwnerType.getInstance(this.cpfDoTitular),
-            name = this.instituicao,
+            name = this.nomeDoTitular,
             taxIdNumber = this.cpfDoTitular
         )
 

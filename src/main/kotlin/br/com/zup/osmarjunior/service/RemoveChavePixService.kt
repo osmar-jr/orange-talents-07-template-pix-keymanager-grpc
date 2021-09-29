@@ -1,12 +1,11 @@
 package br.com.zup.osmarjunior.service
 
-import br.com.zup.osmarjunior.clients.BcbClient
+import br.com.zup.osmarjunior.clients.BancoCentralClient
 import br.com.zup.osmarjunior.clients.ErpItauClient
 import br.com.zup.osmarjunior.endpoints.dtos.ClienteChave
 import br.com.zup.osmarjunior.exceptions.ChavePixNaoEncontradaException
 import br.com.zup.osmarjunior.exceptions.OperacaoNaoPermitidaException
 import br.com.zup.osmarjunior.repository.ChavePixRepository
-import io.grpc.Status
 import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import jakarta.inject.Inject
@@ -21,7 +20,7 @@ import javax.validation.Valid
 class RemoveChavePixService(
     @Inject val chavePixRepository: ChavePixRepository,
     @Inject val erpItauClient: ErpItauClient,
-    @Inject val bcbClient: BcbClient
+    @Inject val bancoCentralClient: BancoCentralClient
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java.simpleName)
 
@@ -46,13 +45,13 @@ class RemoveChavePixService(
         }
 
         val erpItauResponse = erpItauClient.consultaPorClienteId(identificadorCliente)
+
         val dadosDoTitularResponse = erpItauResponse.body()
             ?: throw IllegalStateException("Cliente não encontrado no sistema de contas do banco.")
 
         val deletePixKeyRequest = dadosDoTitularResponse.toDeletePixKeyRequest(chavePix)
-        logger.info("$deletePixKeyRequest")
+        val bcbResponse = bancoCentralClient.remove(chavePix.chave, deletePixKeyRequest)
 
-        val bcbResponse = bcbClient.remove(chavePix.chave, deletePixKeyRequest)
         when(bcbResponse.status){
             HttpStatus.OK -> bcbResponse.body()
             HttpStatus.FORBIDDEN -> throw OperacaoNaoPermitidaException("Operação não autorizada.")

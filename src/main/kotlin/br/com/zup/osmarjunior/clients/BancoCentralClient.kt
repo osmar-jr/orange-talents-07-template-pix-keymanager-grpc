@@ -14,7 +14,7 @@ import io.micronaut.http.client.annotation.Client
 import javax.validation.Valid
 
 @Client(value = "\${bcb.host}")
-interface BcbClient {
+interface BancoCentralClient {
 
     @Post(value = "/api/v1/pix/keys", consumes = [MediaType.APPLICATION_XML], produces = [MediaType.APPLICATION_XML])
     fun registra(@Valid @Body createPixKeyRequest: CreatePixKeyRequest): HttpResponse<CreatePixKeyResponse>

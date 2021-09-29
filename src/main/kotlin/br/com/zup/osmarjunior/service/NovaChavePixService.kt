@@ -1,6 +1,6 @@
 package br.com.zup.osmarjunior.service
 
-import br.com.zup.osmarjunior.clients.BcbClient
+import br.com.zup.osmarjunior.clients.BancoCentralClient
 import br.com.zup.osmarjunior.clients.ErpItauClient
 import br.com.zup.osmarjunior.endpoints.dtos.NovaChavePix
 import br.com.zup.osmarjunior.exceptions.ChavePixExistenteException
@@ -20,7 +20,7 @@ import kotlin.IllegalStateException
 class NovaChavePixService(
     @Inject val chavePixRepository: ChavePixRepository,
     @Inject val erpItauClient: ErpItauClient,
-    @Inject val bcbClient: BcbClient
+    @Inject val bancoCentralClient: BancoCentralClient
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java.simpleName)
 
@@ -37,17 +37,30 @@ class NovaChavePixService(
             novaChavePix.tipoDeConta!!.name
         )
 
-        val dadosDaContaResponse = response.body()
-            ?: throw IllegalStateException("Cliente não encontrado no sistemas de contas do banco.")
+        if (response.body.isEmpty) {
+            logger.error("Cliente inexistente no sistema ERP Iti.")
+            throw IllegalStateException("Cliente não encontrado no sistemas de contas do banco.")
+        }
+
+        val dadosDaContaResponse = response.body.get()
 
         val conta = dadosDaContaResponse.toModel()
         val createChavePixRequest = conta.toCreateChavePixRequest(novaChavePix)
 
-        val bcbResponse = bcbClient.registra(createChavePixRequest)
+        val bcbResponse = bancoCentralClient.registra(createChavePixRequest)
+
         val createPixKeyResponse = when (bcbResponse.status) {
-            HttpStatus.CREATED -> bcbResponse.body()
-            HttpStatus.UNPROCESSABLE_ENTITY -> throw ChavePixExistenteException("A chave ${novaChavePix.chave} já está cadastrada no sistema do BCB.")
-            else -> throw Exception("Erro inesperado ao tentar registrar a chave no Banco Central.")
+            HttpStatus.CREATED -> {
+                bcbResponse.body()
+            }
+            HttpStatus.UNPROCESSABLE_ENTITY -> {
+                logger.error("ERRO: Chave ja existente no BCB client.")
+                throw ChavePixExistenteException("A chave ${novaChavePix.chave} já está cadastrada no sistema do BCB.")
+            }
+            else -> {
+                logger.error("Erro desconhecido no BCB client.")
+                throw Exception("Erro inesperado ao tentar registrar a chave no Banco Central.")
+            }
         }
 
         val chavePix = novaChavePix.toModel(conta, createPixKeyResponse)
