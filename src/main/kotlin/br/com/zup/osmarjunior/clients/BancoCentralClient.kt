@@ -10,6 +10,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 import javax.validation.Valid
+import javax.validation.constraints.NotBlank
 
 @Client(value = "\${bcb.host}")
 interface BancoCentralClient {
@@ -21,5 +22,5 @@ interface BancoCentralClient {
     fun remove(@PathVariable("key") key: String, @Valid @Body deletePixKeyRequest: DeletePixKeyRequest): HttpResponse<DeletePixKeyResponse>
 
     @Get(value = "/api/v1/pix/keys/{key}", consumes = [MediaType.APPLICATION_XML], produces = [MediaType.APPLICATION_XML])
-    fun consultaPorChave(@PathVariable("key") key: String): HttpResponse<PixKeyDetailsResponse>
+    fun consultaPorChave(@PathVariable("key") @NotBlank key: String): HttpResponse<PixKeyDetailsResponse>
 }

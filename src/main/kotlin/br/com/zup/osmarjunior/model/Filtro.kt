@@ -40,14 +40,18 @@ sealed class Filtro {
 
     @Introspected
     data class PorChave(
+        @field:Size(min = 1, max = 77)
         @field:NotBlank
-        @field:Size(max = 77)
         val chave: String
     ) : Filtro() {
 
         private val logger = LoggerFactory.getLogger(this::class.java.simpleName)
 
         override fun filtra(repository: ChavePixRepository, bcbClient: BancoCentralClient): ChavePixInfo {
+
+            // Reforco na validacao da chave que passou pelo NotBlank
+            if (chave.isNullOrBlank()) throw IllegalArgumentException("Chave deve ser informada.")
+
             return repository.findByChave(chave)
                 .map(ChavePixInfo::of)
                 .orElseGet {

@@ -80,7 +80,7 @@ internal class ConsultaChavePixEndpointTest(
                 .build()
         )
 
-        with(response){
+        with(response) {
             assertEquals(chavePix.identificadorCliente.toString(), response.clientId)
             assertEquals(chavePix.id.toString(), response.pixId)
             assertEquals(chavePix.chave, response.chave.chave)
@@ -102,7 +102,7 @@ internal class ConsultaChavePixEndpointTest(
                 .build()
         )
 
-        with(response){
+        with(response) {
             assertTrue(response.pixId.isNullOrBlank())
             assertTrue(response.clientId.isNullOrBlank())
             assertEquals(chavePix.chave, response.chave.chave)
@@ -110,7 +110,7 @@ internal class ConsultaChavePixEndpointTest(
     }
 
     @Test
-    fun `nao dever retornar uma chave quando dados não informados`(){
+    fun `nao dever retornar uma chave quando filtro invalido`() {
 
         val exception = assertThrows<StatusRuntimeException> {
             grpcClient.consultar(
@@ -118,9 +118,93 @@ internal class ConsultaChavePixEndpointTest(
             )
         }
 
-        with(exception){
+        with(exception) {
             assertEquals(Status.INVALID_ARGUMENT.code, status.code)
             assertEquals("Chave Pix inválida ou não informada.", status.description)
+        }
+
+    }
+
+    @Test
+    fun `nao dever retornar uma chave quando chave e cliente id invalidos`() {
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.consultar(
+                ConsultaChavePixRequest.newBuilder()
+                    .setPixId(
+                        PixId.newBuilder()
+                            .setPixId("")
+                            .setClienteId("")
+                            .build()
+                    )
+                    .build()
+            )
+        }
+
+        with(exception) {
+            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
+        }
+
+    }
+
+    @Test
+    fun `nao dever retornar uma chave quando por chave invalida`() {
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.consultar(
+                ConsultaChavePixRequest.newBuilder().setChave("").build()
+            )
+        }
+
+        with(exception){
+            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
+            assertEquals("Chave deve ser informada.", status.description)
+        }
+    }
+
+    @Test
+    fun `nao dever retornar uma chave quando chave e cliente id nao existirem`() {
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.consultar(
+                ConsultaChavePixRequest.newBuilder()
+                    .setPixId(
+                        PixId.newBuilder()
+                            .setPixId(UUID.randomUUID().toString())
+                            .setClienteId(UUID.randomUUID().toString())
+                            .build()
+                    )
+                    .build()
+            )
+        }
+
+        with(exception) {
+            assertEquals(Status.NOT_FOUND.code, status.code)
+            assertEquals("Chave Pix não encontrada.", status.description)
+        }
+
+    }
+
+    @Test
+    fun `nao dever retornar uma chave quando chave e cliente id nao existirem local e BCB`() {
+
+        val chave = "nao@existe.com.br"
+
+        `when`(bcbClient.consultaPorChave(chave)).thenReturn(
+            HttpResponse.notFound()
+        )
+
+        val exception = assertThrows<StatusRuntimeException> {
+            grpcClient.consultar(
+                ConsultaChavePixRequest.newBuilder()
+                    .setChave(chave)
+                    .build()
+            )
+        }
+
+        with(exception) {
+            assertEquals(Status.NOT_FOUND.code, status.code)
+            assertEquals("Chave $chave não encontrada no BCB.", status.description)
         }
 
     }

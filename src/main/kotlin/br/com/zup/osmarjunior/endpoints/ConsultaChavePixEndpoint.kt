@@ -7,7 +7,6 @@ import br.com.zup.osmarjunior.clients.BancoCentralClient
 import br.com.zup.osmarjunior.repository.ChavePixRepository
 import br.com.zup.osmarjunior.shared.handlers.ErrorAroundHandler
 import br.com.zup.osmarjunior.utils.CarregarConsultaChavePixResponse
-import br.com.zup.osmarjunior.utils.Instituicoes
 import br.com.zup.osmarjunior.utils.toModel
 import io.grpc.stub.StreamObserver
 import jakarta.inject.Inject
@@ -23,14 +22,14 @@ class ConsultaChavePixEndpoint(
 ): KeyManagerConsultaServiceGrpc.KeyManagerConsultaServiceImplBase() {
 
     override fun consultar(
-        request: ConsultaChavePixRequest,
+        request: ConsultaChavePixRequest?,
         responseObserver: StreamObserver<ConsultaChavePixResponse>?
     ) {
-        val filtro = request.toModel(validator)
-        val chavePixInfo = filtro.filtra(repository, bcbClient)
+        val filtro = request?.toModel(validator)
+        val chavePixInfo = filtro?.filtra(repository, bcbClient)
 
         responseObserver?.onNext(
-            CarregarConsultaChavePixResponse().convert(chavePixInfo)
+            CarregarConsultaChavePixResponse().convert(chavePixInfo!!)
         )
         responseObserver?.onCompleted()
     }
