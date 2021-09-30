@@ -25,6 +25,7 @@ class ErrorAroundHandlerInterceptor : MethodInterceptor<Any, Any> {
 
             val status = when (ex) {
                 is ConstraintViolationException -> Status.INVALID_ARGUMENT
+                is IllegalArgumentException -> Status.INVALID_ARGUMENT
                 is ChavePixExistenteException -> Status.ALREADY_EXISTS
                 is IllegalStateException -> Status.FAILED_PRECONDITION
                 is ChavePixNaoEncontradaException -> Status.NOT_FOUND
