@@ -4,6 +4,7 @@ import br.com.zup.osmarjunior.clients.request.BankAccountRequest
 import br.com.zup.osmarjunior.clients.request.CreatePixKeyRequest
 import br.com.zup.osmarjunior.clients.request.OwnerRequest
 import br.com.zup.osmarjunior.endpoints.dtos.NovaChavePix
+import br.com.zup.osmarjunior.model.enums.KeyType
 import br.com.zup.osmarjunior.model.enums.OwnerType
 import io.micronaut.core.annotation.Introspected
 import java.util.*
@@ -48,7 +49,7 @@ class ContaAssociada(
         )
 
         return CreatePixKeyRequest(
-            keyType = novaChavePix.tipoDeChave!!.toKeyType(),
+            keyType = KeyType.by(novaChavePix.tipoDeChave!!),
             key = if(novaChavePix.isRandom()) UUID.randomUUID().toString() else novaChavePix.chave!!,
             bankAccount = bankAccount,
             owner = owner

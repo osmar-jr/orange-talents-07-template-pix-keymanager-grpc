@@ -40,7 +40,7 @@ data class NovaChavePix(
     }
 
     fun isRandom(): Boolean {
-        return this.tipoDeChave!! == TipoChave.RANDOM
+        return this.tipoDeChave!! == TipoChave.ALEATORIA
     }
 
 }

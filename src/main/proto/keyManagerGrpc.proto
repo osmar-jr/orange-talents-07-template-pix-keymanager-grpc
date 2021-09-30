@@ -7,6 +7,8 @@ option objc_class_prefix = "HLW";
 
 package br.com.zup.osmarjunior;
 
+import "google/protobuf/timestamp.proto";
+
 service KeyManagerGrpcService {
   rpc cadastraChavePix (ChavePixRequest) returns (ChavePixResponse) {}
 }
@@ -14,13 +16,19 @@ service KeyManagerGrpcService {
 service KeyManagerRemoveService {
   rpc removerChavePix (RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
 }
+
+service KeyManagerConsultaService{
+  rpc consultar(ConsultaChavePixRequest) returns (ConsultaChavePixResponse){}
+}
+
+
 enum TipoDeChave {
   UNKNOWN_KEY = 0;
   CPF = 1;
   CNPJ = 2;
   EMAIL = 3;
-  PHONE = 4;
-  RANDOM = 5;
+  CELULAR = 4;
+  ALEATORIA = 5;
 }
 
 enum TipoDeConta {
@@ -49,4 +57,39 @@ message RemoveChavePixRequest {
 message RemoveChavePixResponse {
   string clientId = 1;
   string pixId = 2;
+}
+
+message PixId {
+  string clienteId = 1;
+  string pixId = 2;
+}
+
+message ConsultaChavePixRequest {
+  oneof filtro {
+    PixId pixId = 1;
+    string chave = 2;
+  }
+}
+
+
+message ContaConsultaResponse {
+  TipoDeConta tipo = 1;
+  string instituicao = 2;
+  string nomeDoTitular = 3;
+  string cpfDoTiTular = 4;
+  string agencia = 5;
+  string numeroDaConta = 6;
+}
+
+message ChaveConsultaResponse {
+  TipoDeChave tipo = 1;
+  string chave = 2;
+  ContaConsultaResponse conta = 3;
+}
+
+message ConsultaChavePixResponse {
+  string clientId = 1;
+  string pixId = 2;
+  ChaveConsultaResponse chave = 3;
+  google.protobuf.Timestamp criadoEm = 4;
 }

@@ -169,9 +169,9 @@ internal class CadastraChavePixEndpointTest(
 
         val chavePixRequest = ChavePixRequest.newBuilder()
             .setIdentificadorCliente(CLIENT_ID.toString())
-            .setTipoDeChave(TipoDeChave.CPF)
-            .setChave("54618975091")
-            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
+            .setTipoDeChave(TipoDeChave.valueOf(chavePix.tipoChave.name))
+            .setChave(chavePix.chave)
+            .setTipoDeConta(TipoDeConta.valueOf(chavePix.tipoConta.name))
             .build()
 
         val exception = assertThrows<StatusRuntimeException> {
@@ -263,7 +263,7 @@ internal class CadastraChavePixEndpointTest(
 
     private fun createPixKeyRequest(): CreatePixKeyRequest {
         return CreatePixKeyRequest(
-            keyType = chavePix.tipoChave.toKeyType(),
+            keyType = KeyType.by(chavePix.tipoChave),
             key = chavePix.chave,
             bankAccount = BankAccountRequest(
                 participant = ContaAssociada.ITAU_UNIBANCO_ISPB,
@@ -287,7 +287,7 @@ internal class CadastraChavePixEndpointTest(
                 participant = ContaAssociada.ITAU_UNIBANCO_ISPB,
                 branch = chavePix.conta.agencia,
                 accountNumber = chavePix.conta.numeroDaConta,
-                accountType = AccountType.CACC.name
+                accountType = AccountType.CACC
             ),
             owner = OwnerResponse(
                 type = OwnerType.NATURAL_PERSON.name,

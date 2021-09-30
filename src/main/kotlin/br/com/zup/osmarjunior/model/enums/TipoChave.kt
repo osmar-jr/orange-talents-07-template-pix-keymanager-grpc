@@ -43,7 +43,7 @@ enum class TipoChave {
         }
     },
 
-    PHONE {
+    CELULAR {
         override fun valida(chave: String?): Boolean {
 
             if (chave.isNullOrBlank()) return false
@@ -51,15 +51,11 @@ enum class TipoChave {
         }
     },
 
-    RANDOM {
+    ALEATORIA {
         override fun valida(chave: String?): Boolean {
             return chave.isNullOrBlank()
         }
     };
 
     abstract fun valida(chave: String?): Boolean
-
-    fun toKeyType(): KeyType {
-        return KeyType.valueOf(this.name)
-    }
 }
