@@ -2,6 +2,7 @@ package br.com.zup.osmarjunior.endpoints
 
 import br.com.zup.osmarjunior.ChavesPorClienteRequest
 import br.com.zup.osmarjunior.KeyManagerConsultaChavesPorClienteServiceGrpc
+import br.com.zup.osmarjunior.TipoDeChave
 import br.com.zup.osmarjunior.model.ChavePix
 import br.com.zup.osmarjunior.model.ContaAssociada
 import br.com.zup.osmarjunior.model.enums.TipoChave
@@ -55,9 +56,22 @@ internal class ConsultaChavesPorClienteEndpointTest(
         )
 
         with(response) {
-            assertTrue(response.chavesList.isNotEmpty())
-            assertTrue(response.chavesList.size == 2)
+            assertTrue(chavesList.isNotEmpty())
+            assertTrue(chavesList.size == 2)
             assertEquals(CLIENT_ID.toString(), response.clienteId)
+        }
+
+        with(response.chavesList) {
+            assertTrue(
+                this.map {
+                Pair(it.tipoDeChave, it.chave)
+            }.toList().containsAll(
+                    listOf(
+                        Pair(TipoDeChave.CPF, "49474152071"),
+                        Pair(TipoDeChave.EMAIL, "carga@intrinseca.com.br")
+                    )
+                )
+            )
         }
     }
 
