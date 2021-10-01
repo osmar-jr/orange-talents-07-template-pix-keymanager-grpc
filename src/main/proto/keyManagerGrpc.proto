@@ -21,6 +21,9 @@ service KeyManagerConsultaService{
   rpc consultar(ConsultaChavePixRequest) returns (ConsultaChavePixResponse){}
 }
 
+service KeyManagerConsultaChavesPorClienteService{
+  rpc consultarPorCliente(ChavesPorClienteRequest) returns (ChavesPorClienteResponse){}
+}
 
 enum TipoDeChave {
   UNKNOWN_KEY = 0;
@@ -92,4 +95,21 @@ message ConsultaChavePixResponse {
   string pixId = 2;
   ChaveConsultaResponse chave = 3;
   google.protobuf.Timestamp criadoEm = 4;
+}
+
+message ChavesPorClienteRequest{
+  string clienteId = 1;
+}
+
+message ChavePorClienteResponse{
+  string pixId = 1;
+  string clienteId = 2;
+  TipoDeChave tipoDeChave = 3;
+  string chave = 4;
+  TipoDeConta tipoDeConta = 5;
+  google.protobuf.Timestamp criadaEm = 6;
+}
+
+message ChavesPorClienteResponse{
+  repeated ChavePorClienteResponse chaves = 1;
 }
