@@ -52,8 +52,8 @@ enum class TipoChave {
     },
 
     ALEATORIA {
-        override fun valida(chave: String?): Boolean {
-            return chave.isNullOrBlank()
+        override fun valida(chave: String?): Boolean{
+            return true
         }
     };
 

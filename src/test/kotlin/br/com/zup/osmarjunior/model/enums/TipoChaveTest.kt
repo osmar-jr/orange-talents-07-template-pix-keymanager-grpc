@@ -139,18 +139,12 @@ internal class TipoChaveTest{
     inner class ALEATORIA {
 
         @Test
-        fun `deve retornar valido quando chave aleatoria nao informada`(){
+        fun `deve retornar valido quando chave aleatoria for ou nao informada`(){
             with(TipoChave.ALEATORIA){
                 assertTrue(valida(null))
                 assertTrue(valida(""))
                 assertTrue(valida("   "))
-            }
-        }
-
-        @Test
-        fun `deve retornar invalido quando chave aleatoria for informada`(){
-            with(TipoChave.ALEATORIA){
-                assertFalse(valida("QUALQUER VALOR"))
+                assertTrue(valida("QUALQUER_VALOR"))
             }
         }
 
