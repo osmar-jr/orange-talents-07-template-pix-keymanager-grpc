@@ -3,6 +3,7 @@ package br.com.zup.osmarjunior.endpoints
 import br.com.zup.osmarjunior.ChavesPorClienteRequest
 import br.com.zup.osmarjunior.ChavesPorClienteResponse
 import br.com.zup.osmarjunior.KeyManagerConsultaChavesPorClienteServiceGrpc
+import br.com.zup.osmarjunior.repository.ChavePixRepository
 import br.com.zup.osmarjunior.service.ConsultaChavesPorClienteService
 import br.com.zup.osmarjunior.shared.handlers.ErrorAroundHandler
 import br.com.zup.osmarjunior.utils.toModel
@@ -13,7 +14,8 @@ import jakarta.inject.Singleton
 @ErrorAroundHandler
 @Singleton
 class ConsultaChavesPorClienteEndpoint(
-    @Inject val serviceConsulta: ConsultaChavesPorClienteService
+    @Inject val serviceConsulta: ConsultaChavesPorClienteService,
+    @Inject val repository: ChavePixRepository
 ) : KeyManagerConsultaChavesPorClienteServiceGrpc.KeyManagerConsultaChavesPorClienteServiceImplBase() {
 
     override fun consultarPorCliente(
@@ -26,6 +28,7 @@ class ConsultaChavesPorClienteEndpoint(
         responseObserver?.onNext(
             ChavesPorClienteResponse
                 .newBuilder()
+                .setClienteId(identificadorCliente.clienteId)
                 .addAllChaves(chavesPorCliente)
                 .build()
         )

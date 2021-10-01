@@ -103,7 +103,6 @@ message ChavesPorClienteRequest{
 
 message ChavePorClienteResponse{
   string pixId = 1;
-  string clienteId = 2;
   TipoDeChave tipoDeChave = 3;
   string chave = 4;
   TipoDeConta tipoDeConta = 5;
@@ -111,5 +110,6 @@ message ChavePorClienteResponse{
 }
 
 message ChavesPorClienteResponse{
-  repeated ChavePorClienteResponse chaves = 1;
+  string clienteId = 1;
+  repeated ChavePorClienteResponse chaves = 2;
 }

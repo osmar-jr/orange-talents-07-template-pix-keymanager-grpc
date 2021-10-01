@@ -21,7 +21,6 @@ class CarregaListaChavesPorCliente {
             return ChavePorClienteResponse
                 .newBuilder()
                 .setPixId(chavePix.id.toString())
-                .setClienteId(chavePix.identificadorCliente.toString())
                 .setTipoDeChave(TipoDeChave.valueOf(chavePix.tipoChave.name))
                 .setChave(chavePix.chave)
                 .setTipoDeConta(TipoDeConta.valueOf(chavePix.tipoConta.name))
