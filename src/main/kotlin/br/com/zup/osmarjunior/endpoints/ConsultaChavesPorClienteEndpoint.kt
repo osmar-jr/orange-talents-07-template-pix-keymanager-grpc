@@ -14,8 +14,7 @@ import jakarta.inject.Singleton
 @ErrorAroundHandler
 @Singleton
 class ConsultaChavesPorClienteEndpoint(
-    @Inject val serviceConsulta: ConsultaChavesPorClienteService,
-    @Inject val repository: ChavePixRepository
+    @Inject val serviceConsulta: ConsultaChavesPorClienteService
 ) : KeyManagerConsultaChavesPorClienteServiceGrpc.KeyManagerConsultaChavesPorClienteServiceImplBase() {
 
     override fun consultarPorCliente(
